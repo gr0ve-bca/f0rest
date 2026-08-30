@@ -8,9 +8,7 @@ f0rest is a standalone, pure-Dart data layer package engineered for [gr0ve](http
 
 ### News
 
-Currently, the only public module is News, which fetches, parses, and searches articles from [Academy Chronicle](https://academychronicle.org)'s RSS feed. Internally, it follows a clean pipeline: `AcademyChronicleSource` handles the actual HTTP fetch and hands raw XML to `AcademyChronicleParser`, which turns it into plain `NewsArticle` objects with no knowledge of HTTP or XML itself. `News` sits on top of both, exposing everything a consumer actually needs — fetching, filtering, and search — without leaking any of the underlying RSS/HTTP machinery.
-
-The `News` modules is split into two main components: fetching and querying. Fetch methods are asynchronous and hit the network through `NewsSource`:
+The news module returns data fetched from Academy Chronicle, BCA's first, and only, newspaper. The module returns the data into clean objects, allowing for easy handling thereafter. Moreover, the module also supports querying.
 
 ```dart
 final news = News(AcademyChronicleSource());
@@ -20,19 +18,19 @@ final latest = await news.fetchArticles();
 final recent = await news.fetchRecentArticles(count: 50);
 ```
 
-On the other hand, query methods, are synchronous and operate on the provided `List<NewsArticles>`. They don't fetch anything themselves; filtering or searching never causes a redundant network call, and the consumer is always in control of what articles it's querying.
+The searching section of the module never fetches to outside sources. Instead, it returns results based on the provided list of articles.
 
 ```dart
 final categories = news.getCategories(latest);
 final stemArticles = news.getArticlesByCategory(latest, 'STEM');
 ```
 
-Search supports title, author, category, or tag (concurrently, if desired) and utilizes the `string_similarity` package. In doing so, typos or misspellings don't prevent relevant matches from surfacing.
+The module was built off of the [string_similarity] (https://pub.dev/packages/string_similarity/) package, which ensures that minor typos and misspellings to not affect the final list.
 
 ```dart
 final results = news.search(
   latest,
-  'robtics', // typo included
+  'robtics', // typo is intentional
   types: {NewsSearchType.title, NewsSearchType.tag},
 );
 
@@ -41,9 +39,24 @@ for (final result in results) {
 }
 ```
 
-Results are returned as `NewsSearchResult` objects, sorted descending by relevance, so the most relevant match is always at index `0`. When a query involves more the one `NewsSearchType`, the article's type scores are averaged out. In doing so, an article meeting multiple filters doesn't automatically outrank one with a single strong match.
+Results come back ranked by relevance, with the best match first.
 
-Failures throughout the module are surfaced as typed exceptions rather than generic ones. For example, a failed HTTP request raises a `NewsFetchException` carrying the page number and status code involved, letting a consumer distinguish a fetch failure from other kinds of errors and react accordingly.
+### Lunch
+
+The lunch module fetches data through Nutrislice's API. After fetching it cleanly sorts all of the items into clean objects, giving each dish there respective properties: common allergens, ingredients, stations, etc.
+
+```dart
+final lunchMenu = LunchMenu(NutrisliceSource());
+
+final today = await lunchMenu.fetchToday();
+final tuesday = await lunchMenu.fetchForDate(DateTime(2026, 9, 1));
+```
+
+Similar to the news module, searching is also provided.
+
+```dart
+final results = lunchMenu.search(today, 'chicken');
+```
 
 ## Usage
 
@@ -57,4 +70,4 @@ This repository is maintained by Arjun Yuvaraj, the founder of gr0ve. For questi
 
 ---
 
-_This is f0rest, Version 0.1.0, a data-collection layer, and part of the gr0ve family._
+_This is f0rest, Version 0.2.0, a data-collection layer, and part of the gr0ve family._
