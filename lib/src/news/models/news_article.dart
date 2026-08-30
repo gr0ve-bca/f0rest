@@ -29,12 +29,8 @@ class NewsArticle {
   }
 
   @override
-  bool operator ==(Object other) {
-    if (other is NewsArticle) {
-      return other.title == title && other.link == link;
-    }
-    return false;
-  }
+  bool operator ==(Object other) =>
+      other is NewsArticle && other.title == title && other.link == link;
 
   @override
   int get hashCode => Object.hash(title, link);
