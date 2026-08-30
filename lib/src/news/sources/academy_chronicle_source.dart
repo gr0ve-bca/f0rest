@@ -6,7 +6,6 @@ import 'package:f0rest/src/news/parsing/academy_chronicle_parser.dart';
 import 'package:f0rest/src/news/sources/news_source.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml/xml.dart' as xml;
-import 'package:intl/intl.dart';
 
 class AcademyChronicleSource implements NewsSource {
   AcademyChronicleSource({http.Client? client})
