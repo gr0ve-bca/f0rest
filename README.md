@@ -58,6 +58,45 @@ Similar to the news module, searching is also provided.
 final results = lunchMenu.search(today, 'chicken');
 ```
 
+### Bus
+
+The bus module tells you where a town's bus is parked. It reads BCA's public bus location spreadsheet and returns the parking-lot spot for a given town. There is no database, no server, and no API key involved.
+
+```dart
+final bus = Bus();
+
+final spots = await bus.get('Glen Rock');
+print(spots); // [(label: Glen Rock, spot: B2)]
+```
+
+Lookups are forgiving. Capitalization, extra spaces, and punctuation are ignored, so `'cliffside park'` finds `CliffsidePark`, and `'ho ho kus'` finds `Ho-Ho-Kus`. The sheet groups some towns together in a single cell (`Alpine/Bergenfield`), so each town in a group resolves to that cell, and bus tags like `BA 10` are ignored when matching.
+
+Each result has a `label`, the sheet's name for that bus, and a `spot`, its parking-lot grid cell. A few towns have more than one bus, so `get` always returns a list.
+
+```dart
+final results = await bus.get('Franklin Lakes'); // three buses
+
+for (final b in results) {
+  print('${b.label}: ${b.spot ?? 'not here yet'}');
+}
+```
+
+There are three possible outcomes:
+
+- **A spot** (`spot: 'B2'`): the bus is in the lot.
+- **No spot** (`spot: null`): the town is listed, but its bus hasn't arrived yet.
+- **An empty list**: the town isn't in the sheet.
+
+The sheet is live, so results are cached for 30 seconds by default. Calling `get` again after that fetches fresh data. If the sheet can't be reached or isn't in the expected format, the module throws a `BusException`.
+
+```dart
+try {
+  final spots = await bus.get('Glen Rock');
+} on BusException catch (e) {
+  print(e); // handle offline / unexpected sheet
+}
+```
+
 ## Usage
 
 Anyone is free to use this repository, so long as they agree to the [LICENSE.md](LICENSE.md).
