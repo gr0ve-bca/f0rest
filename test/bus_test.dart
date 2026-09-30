@@ -1,10 +1,10 @@
-import 'package:f0rest/src/buses/bus.dart';
+import 'package:f0rest/src/buses/buses.dart';
 import 'package:f0rest/src/buses/sources/google_bus_sheet_source.dart';
 import 'package:test/test.dart';
 
 void main() {
   late Bus bus;
-  setUpAll(() => bus = Bus()); // real GoogleSheetBusSource, default ttl
+  setUpAll(() => bus = Bus());
 
   test('layout: "Town(s)" headers are in A1 and C1', () async {
     final rows = await GoogleSheetBusSource().fetchRows();
@@ -24,8 +24,8 @@ void main() {
     expect(
       await bus.get('Cliffside Park'),
       isNotEmpty,
-    ); // "CliffsidePark" in sheet
-    expect(await bus.get('ho ho kus'), isNotEmpty); //      "Ho-Ho-Kus" in sheet
+    );
+    expect(await bus.get('ho ho kus'), isNotEmpty);
   });
 
   test('slash-joined cells and BA tags', () async {
@@ -69,5 +69,11 @@ void main() {
         );
       }
     }
+  });
+
+  test('all and getAll return all bus spots', () async {
+    final all = await bus.all();
+    expect(all, isNotEmpty);
+    expect(await bus.getAll(), equals(all));
   });
 }

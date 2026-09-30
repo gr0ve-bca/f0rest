@@ -1,5 +1,3 @@
-// lib/src/news/sources/academy_chronicle_source.dart
-
 import 'package:f0rest/src/news/models/news_article.dart';
 import 'package:f0rest/src/news/models/news_error.dart';
 import 'package:f0rest/src/news/parsing/academy_chronicle_parser.dart';
@@ -14,9 +12,10 @@ class AcademyChronicleSource implements NewsSource {
   final http.Client _client;
   static const baseUrl = 'https://academychronicle.org/feed/';
   final parser = AcademyChronicleParser();
+
   @override
   Future<List<NewsArticle>> fetchPage(int page) async {
-    final url = "$baseUrl?paged=$page";
+    final url = '$baseUrl?paged=$page';
     final response = await _client
         .get(
           Uri.parse(url),
@@ -36,14 +35,9 @@ class AcademyChronicleSource implements NewsSource {
     }
 
     final document = xml.XmlDocument.parse(response.body);
-    final items = document.findAllElements("item");
-
-    List<NewsArticle> newsArticles = [];
-
-    items.forEach((item) {
-      newsArticles.add(parser.createArticle(item));
-    });
-
-    return newsArticles;
+    return [
+      for (final item in document.findAllElements('item'))
+        parser.createArticle(item),
+    ];
   }
 }

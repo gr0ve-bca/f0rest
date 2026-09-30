@@ -26,3 +26,5 @@
 - Short-lived cache (30 second TTL by default) that shares one download between concurrent calls.
 - Typed exceptions (`BusException`, `BusFetchException`, `BusFormatException`) to help understand the root of errors.
 - Added the `csv` dependency.
+
+## Version 0.4.0

@@ -1,5 +1,3 @@
-// lib/src/news/news.dart
-
 import 'package:f0rest/src/news/models/news_article.dart';
 import 'package:f0rest/src/news/sources/news_source.dart';
 import 'package:f0rest/src/news/search/news_searcher.dart';

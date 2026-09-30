@@ -191,10 +191,10 @@ void main() {
     });
 
     test(
-      'mergeResults averages the score for an article present in both maps',
+      'mergeResults takes the maximum score for an article present in both maps',
       () {
         final merged = searcher.mergeResults({robotics: 0.8}, {robotics: 0.4});
-        expect(merged[robotics], closeTo(0.6, 0.0001));
+        expect(merged[robotics], 0.8);
       },
     );
 

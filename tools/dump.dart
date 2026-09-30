@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:f0rest/src/buses/bus.dart';
+import 'package:f0rest/src/buses/buses.dart';
 import 'package:f0rest/src/buses/sources/google_bus_sheet_source.dart';
 
-String _col(int i) => String.fromCharCode(65 + i); // A..Z is plenty here
+String _col(int i) => String.fromCharCode(65 + i);
 
 Future<void> main() async {
   final rows = await GoogleSheetBusSource().fetchRows();

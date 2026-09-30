@@ -2,7 +2,7 @@
 <h1>f0rest</h1>
 </div>
 
-f0rest is a standalone, pure-Dart data layer package engineered for [gr0ve](https://github.com/gr0ve-bca/gr0ve). Every module is designed to be usable in plain Dart, and tested without a UI, and swapped into gr0ve – or any other consumer – as a git or path dependency. The package, currently a work in progress, is intended to have five key components: buses, lunch, news, events, and teacher absences. It is important to note that teacher absences and events have been publicly excluded, however, if desired, please email the appropriate email listed below.
+f0rest is a standalone, pure-Dart data layer package engineered for [gr0ve](https://github.com/gr0ve-bca/gr0ve). Every module is designed to be usable in plain Dart, and tested without a UI, and swapped into gr0ve – or any other consumer – as a git or path dependency. The package currently provides data modules for buses, lunch, and news; events and absences have been ommited, please email gr0ve.bca@gmail.com if you would like access.
 
 ## What's Here
 
@@ -25,12 +25,12 @@ final categories = news.getCategories(latest);
 final stemArticles = news.getArticlesByCategory(latest, 'STEM');
 ```
 
-The module was built off of the [string_similarity] (https://pub.dev/packages/string_similarity/) package, which ensures that minor typos and misspellings to not affect the final list.
+The module was built off of the [string_similarity](https://pub.dev/packages/string_similarity/) package, which ensures that minor typos and misspellings do not affect the final list.
 
 ```dart
 final results = news.search(
   latest,
-  'robtics', // typo is intentional
+  'robtics',
   types: {NewsSearchType.title, NewsSearchType.tag},
 );
 
@@ -43,19 +43,19 @@ Results come back ranked by relevance, with the best match first.
 
 ### Lunch
 
-The lunch module fetches data through Nutrislice's API. After fetching it cleanly sorts all of the items into clean objects, giving each dish there respective properties: common allergens, ingredients, stations, etc.
+The lunch module fetches data through Nutrislice's API. After fetching it cleanly sorts all of the items into clean objects, giving each dish their respective properties: common allergens, ingredients, stations, etc.
 
 ```dart
-final lunchMenu = LunchMenu(NutrisliceSource());
+final lunch = Lunch(NutrisliceSource());
 
-final today = await lunchMenu.fetchToday();
-final tuesday = await lunchMenu.fetchForDate(DateTime(2026, 9, 1));
+final today = await lunch.fetchToday();
+final tuesday = await lunch.fetchForDate(DateTime(2026, 9, 1));
 ```
 
 Similar to the news module, searching is also provided.
 
 ```dart
-final results = lunchMenu.search(today, 'chicken');
+final results = lunch.search(today, 'chicken');
 ```
 
 ### Bus
@@ -66,7 +66,9 @@ The bus module tells you where a town's bus is parked. It reads BCA's public bus
 final bus = Bus();
 
 final spots = await bus.get('Glen Rock');
-print(spots); // [(label: Glen Rock, spot: B2)]
+print(spots);
+
+final allBuses = await bus.all();
 ```
 
 Lookups are forgiving. Capitalization, extra spaces, and punctuation are ignored, so `'cliffside park'` finds `CliffsidePark`, and `'ho ho kus'` finds `Ho-Ho-Kus`. The sheet groups some towns together in a single cell (`Alpine/Bergenfield`), so each town in a group resolves to that cell, and bus tags like `BA 10` are ignored when matching.
@@ -74,7 +76,7 @@ Lookups are forgiving. Capitalization, extra spaces, and punctuation are ignored
 Each result has a `label`, the sheet's name for that bus, and a `spot`, its parking-lot grid cell. A few towns have more than one bus, so `get` always returns a list.
 
 ```dart
-final results = await bus.get('Franklin Lakes'); // three buses
+final results = await bus.get('Franklin Lakes');
 
 for (final b in results) {
   print('${b.label}: ${b.spot ?? 'not here yet'}');
@@ -93,7 +95,7 @@ The sheet is live, so results are cached for 30 seconds by default. Calling `get
 try {
   final spots = await bus.get('Glen Rock');
 } on BusException catch (e) {
-  print(e); // handle offline / unexpected sheet
+  print(e);
 }
 ```
 
@@ -109,4 +111,4 @@ This repository is maintained by Arjun Yuvaraj, the founder of gr0ve. For questi
 
 ---
 
-_This is f0rest, Version 0.2.0, a data-collection layer, and part of the gr0ve family._
+_This is f0rest, Version 0.4.0, a data-collection layer, and part of the gr0ve family._

@@ -9,7 +9,6 @@ class GoogleSheetBusSource implements BusSource {
 
   final http.Client _client;
 
-  /// "Locations" tab (gid=0) of the BCA Bus Location sheet.
   static final url = Uri.https(
     'docs.google.com',
     '/spreadsheets/d/1S5v7kTbSiqV8GottWVi5tzpqLdTrEgWEY4ND4zvyV3o/export',

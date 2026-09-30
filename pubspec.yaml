@@ -1,21 +1,19 @@
 name: f0rest
 description: A starting point for Dart libraries or applications.
 version: 1.0.0
-# repository: https://github.com/my_org/my_repo
 
 environment:
   sdk: ^3.10.4
 
-# Add regular dependencies here.
 dependencies:
   convert: ^3.1.2
   csv: ^8.0.0
   foundation: ^0.0.5
+  html: ^0.15.7
   http: ^1.6.0
   intl: ^0.20.3
   string_similarity: ^2.2.0
   xml: ^6.6.1
-  # path: ^1.9.0
 
 dev_dependencies:
   lints: ^6.0.0
