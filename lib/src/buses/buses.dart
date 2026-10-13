@@ -42,7 +42,9 @@ class Bus {
     return _index = parsed.index;
   }
 
-  static ({_Index index, List<BusSpot> all}) _buildIndex(List<List<String>> rows) {
+  static ({_Index index, List<BusSpot> all}) _buildIndex(
+    List<List<String>> rows,
+  ) {
     final header = rows.isEmpty ? const <String>[] : rows.first;
     final columns = [
       for (var c = 0; c < header.length; c++)
@@ -55,7 +57,7 @@ class Bus {
     final index = _Index();
     final all = <BusSpot>[];
     for (final c in columns) {
-      for (var r = 1; r < rows.length; r++) {
+      for (var r = 1; r < 26; r++) {
         final cell = c < rows[r].length ? rows[r][c].trim() : '';
         if (cell.isEmpty) {
           final remainingHasTowns = [

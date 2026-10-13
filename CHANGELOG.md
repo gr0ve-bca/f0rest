@@ -28,3 +28,7 @@
 - Added the `csv` dependency.
 
 ## Version 0.4.0
+
+- Added two new modules
+- Made minor patches with the other modules
+- Specifications have been omitted due to privacy reasons.

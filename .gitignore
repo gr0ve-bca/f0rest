@@ -17,3 +17,5 @@ lib/src/absences
 lib/src/absences/
 test/absences_test.dart
 *roster*
+
+lib/f0rest.dart
